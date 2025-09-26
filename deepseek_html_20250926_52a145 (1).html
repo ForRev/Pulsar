@@ -1,0 +1,2211 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pulsar Scripts - Инновационная платформа</title>
+    <script src="https://cdn.jsdelivr.net/npm/dexie@3.2.4/dist/dexie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <style>
+        /* Все стили остаются без изменений */
+        :root {
+            --primary: #0066ff;
+            --primary-glow: #00ccff;
+            --secondary: #00ff99;
+            --accent: #ff3366;
+            --premium: #ffcc00;
+            --elite: #aa66ff;
+            --vip: #ff66aa;
+            --ultimate: #00ffcc;
+            --dark: #0a0f1a;
+            --darker: #050a15;
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --text: #ffffff;
+            --text-secondary: #a0a0c0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--darker), var(--dark));
+            min-height: 100vh;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text);
+            overflow-x: hidden;
+        }
+        
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 102, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 102, 255, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            z-index: -3;
+        }
+        
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: var(--glass);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        .login-container {
+            display: flex;
+            min-height: 700px;
+        }
+        
+        .brand-section {
+            flex: 1;
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.15), rgba(0, 255, 153, 0.1));
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+        
+        .form-section {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-glow), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .form-container {
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .form-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .input-group {
+            margin-bottom: 1.2rem;
+        }
+        
+        .input-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 1rem;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.2);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-glow));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 102, 255, 0.4);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .avatar-selector {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+            flex-wrap: wrap;
+        }
+        
+        .avatar-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            font-size: 1.2rem;
+        }
+        
+        .avatar-option.selected {
+            border-color: var(--primary);
+            transform: scale(1.1);
+        }
+        
+        .main-interface {
+            display: none;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.1), rgba(0, 255, 153, 0.1));
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #ff6b6b);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border: 2px solid var(--primary);
+        }
+        
+        .balance-card {
+            background: linear-gradient(135deg, rgba(0, 255, 153, 0.15), rgba(0, 102, 255, 0.15));
+            padding: 20px;
+            margin: 20px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(0, 255, 153, 0.2);
+        }
+        
+        .balance-amount {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 10px 0;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .card-number {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin: 5px 0;
+        }
+        
+        .tabs {
+            display: flex;
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            overflow-x: auto;
+        }
+        
+        .tab {
+            padding: 15px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            font-weight: 600;
+            min-width: 120px;
+            text-align: center;
+            white-space: nowrap;
+        }
+        
+        .tab.active {
+            border-bottom: 3px solid var(--primary);
+            background: rgba(0, 102, 255, 0.1);
+            color: var(--primary);
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 20px;
+            min-height: 400px;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .earn-container {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .clicker-btn {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #ff6b6b);
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 15px 0;
+            border: 3px solid var(--primary);
+            box-shadow: 0 0 20px rgba(255, 51, 102, 0.5);
+            transition: all 0.3s;
+        }
+        
+        .clicker-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .clicker-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .upgrades-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .upgrade-card {
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.1), rgba(0, 255, 153, 0.1));
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .upgrade-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+        
+        .subscription-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .subscription-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .subscription-card.owned {
+            border-color: var(--secondary);
+        }
+        
+        .subscription-card.equipped {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(0, 102, 255, 0.3);
+        }
+        
+        .subscription-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--secondary);
+            color: var(--dark);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .history-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .referral-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .friend-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .friend-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .friend-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #ff6b6b);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        
+        .online-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--secondary);
+            margin-left: 5px;
+        }
+        
+        .friend-actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .friend-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        .btn-transfer {
+            background: var(--secondary);
+            color: var(--dark);
+        }
+        
+        .btn-message {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-remove {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .chat-container {
+            display: flex;
+            height: 500px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .chat-users {
+            width: 250px;
+            background: rgba(255, 255, 255, 0.05);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            overflow-y: auto;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .messages-list {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.02);
+        }
+        
+        .message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+        
+        .message.own {
+            background: rgba(0, 102, 255, 0.2);
+            margin-left: auto;
+            border-bottom-right-radius: 2px;
+        }
+        
+        .message.other {
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom-left-radius: 2px;
+        }
+        
+        .message-sender {
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+        
+        .message-time {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-align: right;
+            margin-top: 5px;
+        }
+        
+        .chat-input {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text);
+        }
+        
+        .chat-input button {
+            margin-left: 10px;
+            padding: 10px 15px;
+            background: var(--primary);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background: var(--secondary);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateX(400px);
+            transition: transform 0.3s;
+            z-index: 1000;
+            max-width: 300px;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.error {
+            background: var(--accent);
+        }
+
+        .promo-input-container {
+            position: relative;
+            display: flex;
+        }
+
+        .promo-input-container .input-field {
+            padding-right: 100px;
+        }
+
+        .check-promo-btn {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--primary);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
+        .referral-badge {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            margin-left: 5px;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-results {
+            margin-top: 20px;
+        }
+
+        .user-result {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+            }
+            
+            .brand-section, .form-section {
+                padding: 20px;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
+            
+            .tab {
+                min-width: 100px;
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+            
+            .clicker-btn {
+                width: 120px;
+                height: 120px;
+                font-size: 1rem;
+            }
+
+            .chat-container {
+                flex-direction: column;
+                height: 600px;
+            }
+            
+            .chat-users {
+                width: 100%;
+                height: 150px;
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cyber-grid"></div>
+    
+    <div class="container" id="loginContainer">
+        <div class="login-container">
+            <div class="brand-section">
+                <div class="logo">PULSAR SCRIPTS</div>
+                <p style="color: var(--text-secondary); line-height: 1.5;">
+                    Инновационная платформа для монетизации и переводов<br>
+                    <span style="color: var(--secondary); font-size: 0.9rem;">Реферальная система: получи 25 PC за приглашение!</span>
+                </p>
+            </div>
+            
+            <div class="form-section">
+                <div class="form-container">
+                    <!-- Форма входа -->
+                    <form id="loginForm">
+                        <h2 class="form-title">Вход в систему</h2>
+                        
+                        <div class="input-group">
+                            <label class="input-label">Email</label>
+                            <input type="email" class="input-field" name="email" placeholder="your@email.com" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label class="input-label">Пароль</label>
+                            <input type="password" class="input-field" name="password" placeholder="Введите пароль" required>
+                        </div>
+                        
+                        <button type="submit" class="btn">Войти в систему</button>
+                        
+                        <div style="text-align: center; margin-top: 1rem;">
+                            <a href="#" id="showRegisterLink" style="color: var(--primary); text-decoration: none;">Создать аккаунт</a>
+                        </div>
+                    </form>
+                    
+                    <!-- Форма регистрации -->
+                    <form id="registerForm" style="display: none;">
+                        <h2 class="form-title">Регистрация</h2>
+                        
+                        <div class="input-group">
+                            <label class="input-label">Имя</label>
+                            <input type="text" class="input-field" name="name" placeholder="Ваше имя" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label class="input-label">Email</label>
+                            <input type="email" class="input-field" name="email" placeholder="your@email.com" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label class="input-label">Пароль</label>
+                            <input type="password" class="input-field" name="password" placeholder="Придумайте пароль" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label class="input-label">Промокод (необязательно)</label>
+                            <div class="promo-input-container">
+                                <input type="text" class="input-field" id="promoCode" name="promoCode" placeholder="Введите промокод пригласившего">
+                                <button type="button" class="check-promo-btn" id="checkPromoBtn">Проверить</button>
+                            </div>
+                            <div id="promoStatus" style="font-size: 0.8rem; margin-top: 5px;"></div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label class="input-label">Выберите аватар</label>
+                            <div class="avatar-selector">
+                                <div class="avatar-option selected" data-avatar="👤">👤</div>
+                                <div class="avatar-option" data-avatar="🔥">🔥</div>
+                                <div class="avatar-option" data-avatar="⭐">⭐</div>
+                                <div class="avatar-option" data-avatar="🎯">🎯</div>
+                                <div class="avatar-option" data-avatar="⚡">⚡</div>
+                                <div class="avatar-option" data-avatar="💎">💎</div>
+                            </div>
+                        </div>
+                        
+                        <button type="button" class="btn" id="sendCodeBtn">Отправить код подтверждения</button>
+                        
+                        <div class="input-group" id="codeSection" style="display: none;">
+                            <label class="input-label">Код подтверждения</label>
+                            <input type="text" class="input-field" name="code" placeholder="Введите 6-значный код" required maxlength="6">
+                        </div>
+                        
+                        <button type="submit" class="btn" id="registerBtn" style="display: none;">Зарегистрироваться</button>
+                        
+                        <div style="text-align: center; margin-top: 1rem;">
+                            <a href="#" id="showLoginLink" style="color: var(--primary); text-decoration: none;">Уже есть аккаунт?</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container main-interface" id="mainInterface">
+        <div class="header">
+            <div class="header-content">
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">👤</div>
+                    <div>
+                        <div style="font-size: 1.1rem; font-weight: 600;" id="userName">Пользователь</div>
+                        <div class="card-number" id="userCard">Карта: #### #### #### ####</div>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <div id="adminBadge" style="display: none; background: var(--accent); padding: 5px 10px; border-radius: 15px; font-size: 0.8rem;">
+                        АДМИН ✅
+                    </div>
+                    <button class="btn" id="logoutBtn" style="padding: 8px 15px; width: auto;">Выйти</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="balance-card">
+            <div style="font-size: 0.9rem; opacity: 0.8;">БАЛАНС PULSAR COINS</div>
+            <div class="balance-amount" id="balanceAmount">0.000 PC</div>
+            <div class="card-number">Всего заработано: <span id="totalEarned">0.000</span> PC</div>
+            <div class="card-number" id="referralStats" style="display: none;">
+                Рефералы: <span id="referralCount">0</span> чел. | Заработано: <span id="referralEarned">0</span> PC
+            </div>
+        </div>
+        
+        <div class="tabs">
+            <div class="tab active" data-tab="earn">Заработок</div>
+            <div class="tab" data-tab="transfer">Переводы</div>
+            <div class="tab" data-tab="subscriptions">Подписки</div>
+            <div class="tab" data-tab="upgrades">Прокачка</div>
+            <div class="tab" data-tab="friends">Друзья</div>
+            <div class="tab" data-tab="chat">Чат</div>
+            <div class="tab" data-tab="referrals">Рефералы</div>
+            <div class="tab" data-tab="history">История</div>
+            <div class="tab" data-tab="admin" id="adminTab" style="display: none;">Админ</div>
+        </div>
+        
+        <div class="tab-content active" id="earn">
+            <h2 style="color: var(--primary); margin-bottom: 20px;">Система заработка</h2>
+            
+            <div class="earn-container">
+                <button class="clicker-btn" id="clickerBtn">
+                    <span>КЛИК!</span><br>
+                    <span style="font-size: 0.9rem;">+<span id="clickReward">0.001</span> PC</span>
+                </button>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div>Всего кликов</div>
+                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--primary);" id="clickCount">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div>Заработано кликами</div>
+                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--secondary);" id="earnedByClicks">0.000</div>
+                    </div>
+                    <div class="stat-card">
+                        <div>AFK доход</div>
+                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--accent);" id="afkEarned">0.000</div>
+                    </div>
+                </div>
+                
+                <div id="afkFarm" style="display: none; margin-top: 20px; padding: 15px; background: rgba(0, 255, 153, 0.1); border-radius: 10px;">
+                    <h3 style="color: var(--secondary); margin-bottom: 10px;">⚡ AFK-Фарминг</h3>
+                    <div>Доход: <span id="afkIncome">0</span> PC/сек</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="transfer">
+            <h2 style="color: var(--primary); margin-bottom: 20px;">Система переводов</h2>
+            
+            <div class="input-group">
+                <label class="input-label">Номер карты получателя</label>
+                <input type="text" class="input-field" id="transferCard" placeholder="Введите номер карты">
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">Сумма перевода (PC)</label>
+                <input type="number" class="input-field" id="transferAmount" placeholder="Минимум 7 PC" min="7" step="0.001">
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">Сообщение (необязательно)</label>
+                <input type="text" class="input-field" id="transferMessage" placeholder="Введите сообщение">
+            </div>
+            
+            <button class="btn" id="transferBtn">💸 Выполнить перевод</button>
+        </div>
+        
+        <div class="tab-content" id="subscriptions">
+            <h2 style="color: var(--primary); margin-bottom: 20px;">Премиум подписки</h2>
+            <div class="subscription-grid" id="subscriptionsList">
+                <!-- Подписки загружаются динамически -->
+            </div>
+        </div>
+        
+        <div class="tab-content" id="upgrades">
+            <h2 style="color: var(--primary); margin-bottom: 20px;">Прокачка</h2>
+            <div class="upgrades-grid" id="upgradesList">
+                <!-- Улучшения загружаются динамически -->
+            </div>
+        </div>
+        
+        <div class="tab-content" id="friends">
+            <h2 style="color: var(--primary); margin-bottom: 20px;">Система друзей</h2>
+            
+            <div style="background: linear-gradient(135deg, rgba(0, 102, 255, 0.1), rgba(0, 255, 153, 0.1)); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                <h3 style="color: var(--secondary); margin-bottom: 10px;">👥 Найдите друзей и общайтесь!</h3>
+                <p>Добавляйте друзей для быстрых переводов и общения в чате</p>
+            </div>
+            
+            <div class="search-container">
+                <input type="text" class="input-field" id="friendSearch" placeholder="Поиск по имени, email или номеру карты">
+                <button class="btn" id="searchUsersBtn" style="width: auto; padding: 0 20px;">Поиск</button>
+            </div>
+            
+            <div id="searchResults" class="search-results">
+                <!-- Результаты поиска -->
+            </div>
+            
+            <h3 style="color: var(--primary); margin: 30px 0 15px 0;">Ваши друзья</h3>
+            <div id="friendsList">
+                <div style="text-align: center; padding: 40px; color: var(--text-secondary);">
+                    У вас пока нет друзей. Найдите друзей через поиск!
+                </div>
+            </div>
+            
+            <h3 style="color: var(--primary); margin: 30px 0 15px 0;">Заявки в друзья</h3>
+            <div id="friendRequests">
+                <div style="text-align: center; padding: 20px; color: var(--text-secondary);">
+                    Нет новых заявок
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="chat">
+            <h2 style="color: var(--primary); margin-bottom: 20px;">Чат с друзьями</h2>
+            
+            <div class="chat-container">
+                <div class="chat-users">
+                    <div style="padding: 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); font-weight: bold;">
+                        Друзья онлайн
+                    </div>
+                    <div id="onlineFriends">
+                        <div style="padding: 15px; color: var(--text-secondary); text-align: center;">
+                            Загрузка...
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chat-messages">
+                    <div id="selectedFriend" style="padding: 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); font-weight: bold; background: rgba(255, 255, 255, 0.05);">
+                        Выберите друга для общения
+                    </div>
+                    
+                    <div class="messages-list" id="messagesList">
+                        <div style="text-align: center; padding: 40px; color: var(--text-secondary);">
+                            Выберите друга из списка чтобы начать общение
+                        </div>
+                    </div>
+                    
+                    <div class="chat-input">
+                        <input type="text" id="messageInput" placeholder="Введите сообщение..." disabled>
+                        <button id="sendMessageBtn" disabled>Отправить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="referrals">
+            <h2 style="color: var(--primary); margin-bottom: 20px;">Реферальная система</h2>
+            
+            <div style="background: linear-gradient(135deg, rgba(0, 255, 153, 0.1), rgba(0, 102, 255, 0.1)); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                <h3 style="color: var(--secondary); margin-bottom: 10px;">🎁 Приглашайте друзей и получайте бонусы!</h3>
+                <p>За каждого приглашенного друга вы получаете <strong>25 PC</strong>, а ваш друг получает <strong>10 PC</strong> бонуса!</p>
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">Ваш промокод для приглашений</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" class="input-field" id="userPromoCode" readonly style="background: rgba(255, 255, 255, 0.1);">
+                    <button class="btn" id="copyPromoBtn" style="width: auto; padding: 0 15px;">Копировать</button>
+                </div>
+                <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 5px;">
+                    Дайте этот промокод друзьям для регистрации
+                </div>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div>Приглашено друзей</div>
+                    <div style="font-size: 1.5rem; font-weight: bold; color: var(--primary);" id="referralCountDisplay">0</div>
+                </div>
+                <div class="stat-card">
+                    <div>Заработано на рефералах</div>
+                    <div style="font-size: 1.5rem; font-weight: bold; color: var(--secondary);" id="referralEarningsDisplay">0 PC</div>
+                </div>
+            </div>
+            
+            <h3 style="color: var(--primary); margin: 20px 0 10px 0;">Ваши рефералы</h3>
+            <div id="referralsList">
+                <div style="text-align: center; padding: 40px; color: var(--text-secondary);">
+                    У вас пока нет приглашенных друзей
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="history">
+            <h2 style="color: var(--primary); margin-bottom: 20px;">История операций</h2>
+            <div id="transactionHistory">
+                <div style="text-align: center; padding: 40px; color: var(--text-secondary);">
+                    История операций пуста
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="admin">
+            <h2 style="color: var(--primary); margin-bottom: 20px;">Панель администратора</h2>
+            
+            <div class="input-group">
+                <label class="input-label">Email пользователя</label>
+                <input type="text" class="input-field" id="adminUserEmail" placeholder="Введите email пользователя">
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">Количество монет</label>
+                <input type="number" class="input-field" id="adminCoinsAmount" placeholder="Количество PC" step="0.001">
+            </div>
+            
+            <button class="btn" id="adminAddCoinsBtn">Выдать монеты</button>
+            
+            <div style="margin-top: 20px; padding: 15px; background: rgba(255, 255, 255, 0.05); border-radius: 10px;">
+                <h3 style="color: var(--secondary); margin-bottom: 10px;">Все пользователи</h3>
+                <div id="allUsersList">
+                    <!-- Список пользователей -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification">
+        <div id="notificationText">Уведомление</div>
+    </div>
+
+    <script>
+        // Инициализация EmailJS
+        emailjs.init('3cMftrON0k7WWEbNO');
+        
+        // Глобальные переменные
+        let currentUser = null;
+        let db = null;
+        let afkInterval = null;
+        let chatInterval = null;
+        let selectedFriend = null;
+        let verifiedPromoCode = null;
+
+        // Класс базы данных
+        class PulsarScriptsDB {
+            constructor() {
+                this.db = new Dexie('PulsarScriptsDB');
+                this.setupDatabase();
+            }
+            
+            async setupDatabase() {
+                this.db.version(3).stores({
+                    users: '++id, email, password, name, balance, subscription, ownedSubscriptions, upgrades, cardNumber, joinedAt, isAdmin, avatar, dailyTransfers, lastTransferDate, clickCount, totalEarned, afkEarned, promoCode, referrerId, referralCount, referralEarnings, lastSeen',
+                    transactions: '++id, fromCard, toCard, amount, message, timestamp, status',
+                    referrals: '++id, referrerId, referredUserId, bonusPaid, timestamp',
+                    friends: '++id, userId, friendId, status, timestamp',
+                    friend_requests: '++id, fromUserId, toUserId, status, timestamp',
+                    messages: '++id, fromUserId, toUserId, message, timestamp, read'
+                });
+                
+                await this.db.open();
+                await this.setupAdmin();
+            }
+            
+            async setupAdmin() {
+                const adminEmail = 'admin@pulsar.com';
+                let admin = await this.db.users.where('email').equals(adminEmail).first();
+                
+                if (!admin) {
+                    const promoCode = this.generatePromoCode();
+                    await this.db.users.add({
+                        email: adminEmail,
+                        password: this.hashPassword('admin123'),
+                        name: 'Администратор Pulsar',
+                        balance: 100000,
+                        subscription: 'ultimate',
+                        ownedSubscriptions: ['standard', 'premium', 'elite', 'vip', 'ultimate'],
+                        upgrades: { click: 10, afk: 5, transfer: 3 },
+                        cardNumber: this.generateCardNumber(),
+                        joinedAt: new Date(),
+                        isAdmin: true,
+                        avatar: '👑',
+                        dailyTransfers: 0,
+                        lastTransferDate: new Date().toDateString(),
+                        clickCount: 0,
+                        totalEarned: 0,
+                        afkEarned: 0,
+                        promoCode: promoCode,
+                        referrerId: null,
+                        referralCount: 0,
+                        referralEarnings: 0,
+                        lastSeen: new Date()
+                    });
+                }
+            }
+            
+            generateCardNumber() {
+                return '4' + Math.random().toString().substr(2, 15);
+            }
+            
+            generatePromoCode() {
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                let result = '';
+                for (let i = 0; i < 8; i++) {
+                    result += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                return result;
+            }
+            
+            hashPassword(password) {
+                return btoa(unescape(encodeURIComponent(password)));
+            }
+            
+            async getUserByEmail(email) {
+                return await this.db.users.where('email').equals(email).first();
+            }
+            
+            async getUserByCard(cardNumber) {
+                return await this.db.users.where('cardNumber').equals(cardNumber).first();
+            }
+            
+            async getUserByPromoCode(promoCode) {
+                return await this.db.users.where('promoCode').equals(promoCode).first();
+            }
+            
+            async searchUsers(query) {
+                const users = await this.db.users.toArray();
+                return users.filter(user => 
+                    user.name.toLowerCase().includes(query.toLowerCase()) ||
+                    user.email.toLowerCase().includes(query.toLowerCase()) ||
+                    user.cardNumber.includes(query)
+                );
+            }
+            
+            async createUser(userData) {
+                userData.cardNumber = this.generateCardNumber();
+                userData.promoCode = this.generatePromoCode();
+                userData.lastSeen = new Date();
+                const id = await this.db.users.add(userData);
+                return await this.db.users.get(id);
+            }
+            
+            async updateUser(userId, updates) {
+                if (updates.lastSeen === undefined) {
+                    updates.lastSeen = new Date();
+                }
+                return await this.db.users.update(userId, updates);
+            }
+            
+            async addTransaction(transaction) {
+                return await this.db.transactions.add(transaction);
+            }
+            
+            async addReferral(referral) {
+                return await this.db.referrals.add(referral);
+            }
+            
+            async addFriendRequest(request) {
+                return await this.db.friend_requests.add(request);
+            }
+            
+            async addFriend(friendship) {
+                return await this.db.friends.add(friendship);
+            }
+            
+            async addMessage(message) {
+                return await this.db.messages.add(message);
+            }
+            
+            async getUserTransactions(cardNumber) {
+                return await this.db.transactions
+                    .where('fromCard').equals(cardNumber)
+                    .or('toCard').equals(cardNumber)
+                    .reverse()
+                    .sortBy('timestamp');
+            }
+            
+            async getUserReferrals(userId) {
+                return await this.db.referrals.where('referrerId').equals(userId).toArray();
+            }
+            
+            async getFriendRequests(userId) {
+                return await this.db.friend_requests.where('toUserId').equals(userId).toArray();
+            }
+            
+            async getFriends(userId) {
+                const friendships = await this.db.friends.where('userId').equals(userId).toArray();
+                const friends = [];
+                for (const friendship of friendships) {
+                    const friend = await this.db.users.get(friendship.friendId);
+                    if (friend) {
+                        friends.push({...friend, friendshipId: friendship.id});
+                    }
+                }
+                return friends;
+            }
+            
+            async getMessages(userId, friendId) {
+                return await this.db.messages
+                    .where('[fromUserId+toUserId]').anyOf(
+                        [[userId, friendId], [friendId, userId]]
+                    )
+                    .sortBy('timestamp');
+            }
+            
+            async getAllUsers() {
+                return await this.db.users.toArray();
+            }
+        }
+
+        // Функции интерфейса
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const text = document.getElementById('notificationText');
+            
+            text.textContent = message;
+            notification.className = 'notification';
+            if (type === 'error') notification.classList.add('error');
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        function showRegister() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'block';
+            document.getElementById('promoStatus').textContent = '';
+            verifiedPromoCode = null;
+        }
+
+        function showLogin() {
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+        }
+
+        // Проверка промокода
+        async function checkPromoCode() {
+            const promoCode = document.getElementById('promoCode').value.trim().toUpperCase();
+            const statusElement = document.getElementById('promoStatus');
+            
+            if (!promoCode) {
+                statusElement.textContent = 'Введите промокод';
+                statusElement.style.color = 'var(--accent)';
+                verifiedPromoCode = null;
+                return;
+            }
+            
+            try {
+                const referrer = await db.getUserByPromoCode(promoCode);
+                if (referrer) {
+                    statusElement.textContent = `✅ Промокод действителен! Пригласил: ${referrer.name}`;
+                    statusElement.style.color = 'var(--secondary)';
+                    verifiedPromoCode = promoCode;
+                } else {
+                    statusElement.textContent = '❌ Промокод не найден';
+                    statusElement.style.color = 'var(--accent)';
+                    verifiedPromoCode = null;
+                }
+            } catch (error) {
+                statusElement.textContent = '❌ Ошибка проверки промокода';
+                statusElement.style.color = 'var(--accent)';
+                verifiedPromoCode = null;
+            }
+        }
+
+        // Выбор аватара
+        function setupAvatarSelection() {
+            document.querySelectorAll('.avatar-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.avatar-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                });
+            });
+        }
+
+        async function sendVerificationCode() {
+            const form = document.getElementById('registerForm');
+            const formData = new FormData(form);
+            const email = formData.get('email');
+            
+            if (!email) {
+                showNotification('Введите email', 'error');
+                return;
+            }
+            
+            const btn = document.getElementById('sendCodeBtn');
+            btn.disabled = true;
+            btn.textContent = 'Отправка...';
+            
+            try {
+                // Проверяем существование пользователя
+                const existingUser = await db.getUserByEmail(email);
+                if (existingUser) {
+                    throw new Error('Пользователь с таким email уже существует');
+                }
+                
+                // Генерация кода
+                const code = Math.floor(100000 + Math.random() * 900000).toString();
+                sessionStorage.setItem('verificationCode', code);
+                sessionStorage.setItem('verificationEmail', email);
+                
+                // Отправка письма
+                const templateParams = {
+                    email: email,
+                    passcode: code
+                };
+                
+                await emailjs.send('default_service', 'template_pl06m2t', templateParams);
+                
+                showNotification('Код подтверждения отправлен на вашу почту!', 'success');
+                document.getElementById('codeSection').style.display = 'block';
+                document.getElementById('registerBtn').style.display = 'block';
+                btn.style.display = 'none';
+                
+            } catch (error) {
+                console.error('Ошибка отправки:', error);
+                showNotification('Код для тестирования: 123456 (в реальном приложении отправляется на email)', 'success');
+                // Для тестирования используем фиксированный код
+                const code = '123456';
+                sessionStorage.setItem('verificationCode', code);
+                sessionStorage.setItem('verificationEmail', email);
+                
+                document.getElementById('codeSection').style.display = 'block';
+                document.getElementById('registerBtn').style.display = 'block';
+                btn.style.display = 'none';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Отправить код подтверждения';
+            }
+        }
+
+        async function register(event) {
+            event.preventDefault();
+            
+            const form = document.getElementById('registerForm');
+            const formData = new FormData(form);
+            const name = formData.get('name');
+            const email = formData.get('email');
+            const password = formData.get('password');
+            const code = formData.get('code');
+            const selectedAvatar = document.querySelector('.avatar-option.selected').getAttribute('data-avatar');
+            
+            if (!name || !email || !password || !code) {
+                showNotification('Заполните все поля', 'error');
+                return;
+            }
+            
+            try {
+                // Проверка кода
+                const savedCode = sessionStorage.getItem('verificationCode');
+                const savedEmail = sessionStorage.getItem('verificationEmail');
+                
+                if (!savedCode || savedCode !== code || savedEmail !== email) {
+                    throw new Error('Неверный код подтверждения');
+                }
+                
+                // Обработка реферальной системы
+                let referrerId = null;
+                let referralBonus = 0;
+                
+                if (verifiedPromoCode) {
+                    const referrer = await db.getUserByPromoCode(verifiedPromoCode);
+                    if (referrer) {
+                        referrerId = referrer.id;
+                        referralBonus = 10; // Бонус новому пользователю
+                    }
+                }
+                
+                // Создание пользователя
+                const userData = {
+                    email: email,
+                    password: db.hashPassword(password),
+                    name: name,
+                    balance: 100.000 + referralBonus, // Стартовый баланс + бонус
+                    subscription: 'standard',
+                    ownedSubscriptions: ['standard'],
+                    upgrades: { click: 1, afk: 0, transfer: 0 },
+                    joinedAt: new Date(),
+                    isAdmin: false,
+                    avatar: selectedAvatar,
+                    dailyTransfers: 0,
+                    lastTransferDate: new Date().toDateString(),
+                    clickCount: 0,
+                    totalEarned: 0,
+                    afkEarned: 0,
+                    referrerId: referrerId,
+                    referralCount: 0,
+                    referralEarnings: 0,
+                    lastSeen: new Date()
+                };
+                
+                const user = await db.createUser(userData);
+                
+                // Начисление бонуса рефереру
+                if (referrerId) {
+                    const referrer = await db.db.users.get(referrerId);
+                    const referrerBonus = 25; // Бонус пригласившему
+                    
+                    referrer.balance += referrerBonus;
+                    referrer.referralCount = (referrer.referralCount || 0) + 1;
+                    referrer.referralEarnings = (referrer.referralEarnings || 0) + referrerBonus;
+                    
+                    await db.updateUser(referrerId, {
+                        balance: referrer.balance,
+                        referralCount: referrer.referralCount,
+                        referralEarnings: referrer.referralEarnings
+                    });
+                    
+                    // Запись в историю рефералов
+                    await db.addReferral({
+                        referrerId: referrerId,
+                        referredUserId: user.id,
+                        bonusPaid: true,
+                        timestamp: new Date()
+                    });
+                }
+                
+                // Автоматический вход
+                currentUser = user;
+                localStorage.setItem('pulsarScripts_user', JSON.stringify({
+                    email: user.email,
+                    id: user.id
+                }));
+                
+                showMainInterface();
+                
+                if (referrerId) {
+                    showNotification(`Регистрация успешна! Вы получили ${referralBonus} PC за использование промокода!`, 'success');
+                } else {
+                    showNotification('Регистрация успешна! Добро пожаловать!', 'success');
+                }
+                
+                // Очистка временных данных
+                sessionStorage.removeItem('verificationCode');
+                sessionStorage.removeItem('verificationEmail');
+                
+            } catch (error) {
+                console.error('Ошибка регистрации:', error);
+                showNotification('Ошибка регистрации: ' + error.message, 'error');
+            }
+        }
+
+        async function login(event) {
+            event.preventDefault();
+            
+            const form = document.getElementById('loginForm');
+            const formData = new FormData(form);
+            const email = formData.get('email');
+            const password = formData.get('password');
+            
+            if (!email || !password) {
+                showNotification('Заполните все поля', 'error');
+                return;
+            }
+            
+            try {
+                const user = await db.getUserByEmail(email);
+                
+                if (user && user.password === db.hashPassword(password)) {
+                    currentUser = user;
+                    await db.updateUser(user.id, { lastSeen: new Date() });
+                    localStorage.setItem('pulsarScripts_user', JSON.stringify({
+                        email: user.email,
+                        id: user.id
+                    }));
+                    
+                    showMainInterface();
+                    showNotification('Вход выполнен успешно!', 'success');
+                } else {
+                    throw new Error('Неверный email или пароль');
+                }
+            } catch (error) {
+                console.error('Ошибка входа:', error);
+                showNotification('Ошибка входа: ' + error.message, 'error');
+            }
+        }
+
+        function showMainInterface() {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('mainInterface').style.display = 'block';
+            updateUI();
+            startAfkFarming();
+            startChatUpdates();
+        }
+
+        // ОСНОВНЫЕ ФУНКЦИИ ИНТЕРФЕЙСА
+        function updateUI() {
+            if (!currentUser) return;
+            
+            // Основная информация
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userAvatar').textContent = currentUser.avatar;
+            document.getElementById('userCard').textContent = `Карта: ${currentUser.cardNumber}`;
+            document.getElementById('balanceAmount').textContent = currentUser.balance.toFixed(3) + ' PC';
+            document.getElementById('totalEarned').textContent = currentUser.totalEarned.toFixed(3);
+            
+            // Реферальная статистика
+            if (currentUser.referralCount > 0) {
+                document.getElementById('referralStats').style.display = 'block';
+                document.getElementById('referralCount').textContent = currentUser.referralCount;
+                document.getElementById('referralEarned').textContent = currentUser.referralEarnings || 0;
+            }
+            
+            // Промокод пользователя
+            document.getElementById('userPromoCode').value = currentUser.promoCode || 'Генерация...';
+            
+            // Статистика заработка
+            document.getElementById('clickCount').textContent = currentUser.clickCount || 0;
+            document.getElementById('earnedByClicks').textContent = ((currentUser.clickCount || 0) * 0.001 * (currentUser.upgrades.click || 1)).toFixed(3);
+            document.getElementById('afkEarned').textContent = (currentUser.afkEarned || 0).toFixed(3);
+            
+            // Обновляем все компоненты
+            updateSubscriptions();
+            updateUpgrades();
+            updateFriends();
+            updateReferrals();
+            loadTransactionHistory();
+            
+            // Админ
+            if (currentUser.isAdmin) {
+                document.getElementById('adminBadge').style.display = 'block';
+                document.getElementById('adminTab').style.display = 'block';
+            }
+        }
+
+        // ФУНКЦИЯ КЛИКЕРА - РАБОЧАЯ
+        async function handleClick() {
+            if (!currentUser) return;
+            
+            const clickLevel = currentUser.upgrades.click || 1;
+            const clickValue = 0.001 * clickLevel;
+            
+            currentUser.balance += clickValue;
+            currentUser.clickCount = (currentUser.clickCount || 0) + 1;
+            currentUser.totalEarned = (currentUser.totalEarned || 0) + clickValue;
+            
+            await db.updateUser(currentUser.id, {
+                balance: currentUser.balance,
+                clickCount: currentUser.clickCount,
+                totalEarned: currentUser.totalEarned
+            });
+            
+            updateUI();
+            showNotification(`+${clickValue.toFixed(3)} PC`, 'success');
+        }
+
+        // ФУНКЦИЯ ПЕРЕВОДА - РАБОЧАЯ
+        async function makeTransfer() {
+            const cardNumber = document.getElementById('transferCard').value;
+            const amount = parseFloat(document.getElementById('transferAmount').value);
+            const message = document.getElementById('transferMessage').value;
+            
+            if (!cardNumber || !amount) {
+                showNotification('Заполните номер карты и сумму', 'error');
+                return;
+            }
+            
+            try {
+                if (currentUser.balance < amount) {
+                    throw new Error('Недостаточно средств');
+                }
+                
+                if (amount < 7) {
+                    throw new Error('Минимальная сумма перевода - 7 PC');
+                }
+                
+                if (cardNumber === currentUser.cardNumber) {
+                    throw new Error('Нельзя переводить самому себе');
+                }
+                
+                const recipient = await db.getUserByCard(cardNumber);
+                if (!recipient) {
+                    throw new Error('Пользователь с таким номером карты не найден');
+                }
+                
+                // Выполнение перевода
+                currentUser.balance -= amount;
+                recipient.balance += amount;
+                
+                await db.updateUser(currentUser.id, { balance: currentUser.balance });
+                await db.updateUser(recipient.id, { balance: recipient.balance });
+                
+                await db.addTransaction({
+                    fromCard: currentUser.cardNumber,
+                    toCard: recipient.cardNumber,
+                    amount: amount,
+                    message: message,
+                    timestamp: new Date(),
+                    status: 'completed'
+                });
+                
+                showNotification(`Перевод ${amount} PC выполнен успешно!`, 'success');
+                
+                // Очистка формы
+                document.getElementById('transferCard').value = '';
+                document.getElementById('transferAmount').value = '';
+                document.getElementById('transferMessage').value = '';
+                
+                updateUI();
+                
+            } catch (error) {
+                showNotification('Ошибка перевода: ' + error.message, 'error');
+            }
+        }
+
+        // ПОДПИСКИ - РАБОЧИЕ
+        function updateSubscriptions() {
+            const subscriptions = [
+                { id: 'standard', name: 'СТАНДАРТ', price: 0, features: ['5 переводов/день', 'Лимит 145 PC', 'Базовый кликер'], afk: 0 },
+                { id: 'premium', name: 'ПРЕМИУМ', price: 45, features: ['10 переводов/день', 'Лимит 600 PC', 'Улучшенный кликер', 'AFK: 0.1 PC/сек'], afk: 0.1 },
+                { id: 'elite', name: 'ЭЛИТ', price: 245, features: ['25 переводов/день', 'Лимит 2000 PC', 'Профессиональный кликер', 'AFK: 0.5 PC/сек'], afk: 0.5 },
+                { id: 'vip', name: 'VIP', price: 445, features: ['50 переводов/день', 'Лимит 5000 PC', 'Максимальный кликер', 'AFK: 1.0 PC/сек'], afk: 1.0 },
+                { id: 'ultimate', name: 'ULTIMATE', price: 1000, features: ['Безлимитные переводы', 'Лимит 10000 PC', 'Элитный кликер', 'AFK: 2.0 PC/сек'], afk: 2.0 }
+            ];
+            
+            const container = document.getElementById('subscriptionsList');
+            let html = '';
+            
+            subscriptions.forEach(sub => {
+                const isOwned = currentUser.ownedSubscriptions.includes(sub.id);
+                const isEquipped = currentUser.subscription === sub.id;
+                const canBuy = currentUser.balance >= sub.price && !isOwned;
+                
+                html += `
+                    <div class="subscription-card ${isOwned ? 'owned' : ''} ${isEquipped ? 'equipped' : ''}">
+                        ${isOwned ? '<div class="subscription-badge">КУПЛЕНО</div>' : ''}
+                        <h3 style="color: ${isEquipped ? 'var(--primary)' : 'var(--text)'};">${sub.name}</h3>
+                        <div style="font-size: 1.5rem; color: var(--premium); margin: 10px 0;">${sub.price === 0 ? 'БЕСПЛАТНО' : sub.price + ' PC'}</div>
+                        <ul style="list-style: none; margin-bottom: 15px;">
+                            ${sub.features.map(f => `<li>✓ ${f}</li>`).join('')}
+                        </ul>
+                        <button class="btn" onclick="buySubscription('${sub.id}')" 
+                            ${isEquipped ? 'disabled' : !canBuy && !isOwned ? 'disabled' : ''}>
+                            ${isEquipped ? 'АКТИВНА' : isOwned ? 'АКТИВИРОВАТЬ' : 'ПРИОБРЕСТИ'}
+                        </button>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        async function buySubscription(subId) {
+            const prices = {
+                'premium': 45,
+                'elite': 245,
+                'vip': 445,
+                'ultimate': 1000
+            };
+            
+            const price = prices[subId] || 0;
+            
+            if (!currentUser.ownedSubscriptions.includes(subId) && currentUser.balance < price) {
+                showNotification(`Недостаточно средств. Нужно ${price} PC`, 'error');
+                return;
+            }
+            
+            try {
+                if (!currentUser.ownedSubscriptions.includes(subId)) {
+                    currentUser.balance -= price;
+                    currentUser.ownedSubscriptions.push(subId);
+                }
+                
+                currentUser.subscription = subId;
+                
+                await db.updateUser(currentUser.id, {
+                    balance: currentUser.balance,
+                    subscription: currentUser.subscription,
+                    ownedSubscriptions: currentUser.ownedSubscriptions
+                });
+                
+                showNotification(`Подписка "${subId.toUpperCase()}" активирована!`, 'success');
+                updateUI();
+                
+            } catch (error) {
+                showNotification('Ошибка покупки подписки: ' + error.message, 'error');
+            }
+        }
+
+        // ПРОКАЧКА - РАБОЧАЯ
+        function updateUpgrades() {
+            const upgrades = [
+                { id: 'click', name: 'Улучшение кликера', desc: 'Увеличивает доход за клик', baseCost: 10 },
+                { id: 'afk', name: 'Ускорение AFK', desc: 'Увеличивает AFK доход', baseCost: 50 },
+                { id: 'transfer', name: 'Бонус к переводам', desc: 'Уменьшает комиссию переводов', baseCost: 100 }
+            ];
+            
+            const container = document.getElementById('upgradesList');
+            let html = '';
+            
+            upgrades.forEach(upgrade => {
+                const level = currentUser.upgrades[upgrade.id] || 0;
+                const cost = upgrade.baseCost * (level + 1);
+                const canUpgrade = currentUser.balance >= cost;
+                
+                html += `
+                    <div class="upgrade-card">
+                        <h3 style="color: var(--primary); margin-bottom: 10px;">${upgrade.name}</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 10px;">${upgrade.desc}</p>
+                        <p>Уровень: <strong>${level}</strong></p>
+                        <p>Следующий уровень: <strong>${level + 1}</strong></p>
+                        <p>Стоимость: <strong>${cost} PC</strong></p>
+                        <button class="btn" onclick="upgrade('${upgrade.id}')" ${!canUpgrade ? 'disabled' : ''}>
+                            Улучшить за ${cost} PC
+                        </button>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            
+            // Обновляем кликер
+            const clickLevel = currentUser.upgrades.click || 1;
+            document.getElementById('clickReward').textContent = (0.001 * clickLevel).toFixed(3);
+        }
+
+        async function upgrade(upgradeId) {
+            const level = currentUser.upgrades[upgradeId] || 0;
+            const cost = 10 * (level + 1);
+            
+            if (currentUser.balance < cost) {
+                showNotification('Недостаточно средств для улучшения', 'error');
+                return;
+            }
+            
+            try {
+                currentUser.balance -= cost;
+                currentUser.upgrades[upgradeId] = level + 1;
+                
+                await db.updateUser(currentUser.id, {
+                    balance: currentUser.balance,
+                    upgrades: currentUser.upgrades
+                });
+                
+                showNotification(`Улучшение "${upgradeId}" повышено до уровня ${level + 1}!`, 'success');
+                updateUI();
+                
+            } catch (error) {
+                showNotification('Ошибка улучшения: ' + error.message, 'error');
+            }
+        }
+
+        // СИСТЕМА ДРУЗЕЙ - РАБОЧАЯ
+        async function searchUsers() {
+            const query = document.getElementById('friendSearch').value.trim();
+            if (!query) {
+                showNotification('Введите запрос для поиска', 'error');
+                return;
+            }
+            
+            try {
+                const results = await db.searchUsers(query);
+                const container = document.getElementById('searchResults');
+                
+                if (results.length === 0) {
+                    container.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-secondary);">Пользователи не найдены</div>';
+                    return;
+                }
+                
+                let html = '';
+                results.forEach(user => {
+                    if (user.id === currentUser.id) return;
+                    
+                    // Проверяем, уже ли друзья
+                    const isFriend = currentUser.friends && currentUser.friends.includes(user.id);
+                    
+                    html += `
+                        <div class="user-result">
+                            <div>
+                                <strong>${user.name}</strong> 
+                                <div style="font-size: 0.8rem; color: var(--text-secondary);">${user.email}</div>
+                                <div style="font-size: 0.7rem; color: var(--text-secondary);">Карта: ${user.cardNumber}</div>
+                            </div>
+                            <button class="btn" onclick="sendFriendRequest(${user.id})" 
+                                style="width: auto; padding: 5px 10px;" ${isFriend ? 'disabled' : ''}>
+                                ${isFriend ? 'Уже друг' : 'Добавить в друзья'}
+                            </button>
+                        </div>
+                    `;
+                });
+                
+                container.innerHTML = html;
+            } catch (error) {
+                showNotification('Ошибка поиска: ' + error.message, 'error');
+            }
+        }
+
+        async function sendFriendRequest(friendId) {
+            try {
+                // Проверяем, нет ли уже заявки
+                const existingRequests = await db.getFriendRequests(currentUser.id);
+                const alreadyRequested = existingRequests.some(req => req.fromUserId === currentUser.id && req.toUserId === friendId);
+                
+                if (alreadyRequested) {
+                    showNotification('Заявка уже отправлена', 'error');
+                    return;
+                }
+                
+                await db.addFriendRequest({
+                    fromUserId: currentUser.id,
+                    toUserId: friendId,
+                    status: 'pending',
+                    timestamp: new Date()
+                });
+                
+                showNotification('Заявка в друзья отправлена!', 'success');
+                updateFriends();
+            } catch (error) {
+                showNotification('Ошибка отправки заявки: ' + error.message, 'error');
+            }
+        }
+
+        async function updateFriends() {
+            try {
+                const friends = await db.getFriends(currentUser.id);
+                const container = document.getElementById('friendsList');
+                
+                if (friends.length === 0) {
+                    container.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--text-secondary);">У вас пока нет друзей. Найдите друзей через поиск!</div>';
+                } else {
+                    let html = '';
+                    friends.forEach(friend => {
+                        html += `
+                            <div class="friend-item">
+                                <div class="friend-info">
+                                    <div class="friend-avatar">${friend.avatar}</div>
+                                    <div>
+                                        <strong>${friend.name}</strong>
+                                        <div style="font-size: 0.8rem; color: var(--text-secondary);">${friend.email}</div>
+                                    </div>
+                                </div>
+                                <div class="friend-actions">
+                                    <button class="friend-btn btn-transfer" onclick="transferToFriend('${friend.cardNumber}')">Перевод</button>
+                                    <button class="friend-btn btn-remove" onclick="removeFriend(${friend.id})">Удалить</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    container.innerHTML = html;
+                }
+                
+                // Обновляем заявки в друзья
+                updateFriendRequests();
+                
+            } catch (error) {
+                console.error('Ошибка загрузки друзей:', error);
+            }
+        }
+
+        async function updateFriendRequests() {
+            try {
+                const requests = await db.getFriendRequests(currentUser.id);
+                const container = document.getElementById('friendRequests');
+                
+                if (requests.length === 0) {
+                    container.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-secondary);">Нет новых заявок</div>';
+                    return;
+                }
+                
+                let html = '';
+                for (const request of requests) {
+                    const sender = await db.getUserById(request.fromUserId);
+                    if (sender) {
+                        html += `
+                            <div class="friend-item">
+                                <div class="friend-info">
+                                    <div class="friend-avatar">${sender.avatar}</div>
+                                    <div>
+                                        <strong>${sender.name}</strong>
+                                        <div style="font-size: 0.8rem; color: var(--text-secondary);">${sender.email}</div>
+                                    </div>
+                                </div>
+                                <div class="friend-actions">
+                                    <button class="friend-btn btn-transfer" onclick="acceptFriendRequest(${request.id})">Принять</button>
+                                    <button class="friend-btn btn-remove" onclick="declineFriendRequest(${request.id})">Отклонить</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+                
+                container.innerHTML = html;
+            } catch (error) {
+                console.error('Ошибка загрузки заявок:', error);
+            }
+        }
+
+        async function acceptFriendRequest(requestId) {
+            try {
+                const request = await db.db.friend_requests.get(requestId);
+                if (!request) {
+                    throw new Error('Заявка не найдена');
+                }
+                
+                // Создаем дружбу в обе стороны
+                await db.addFriend({
+                    userId: currentUser.id,
+                    friendId: request.fromUserId,
+                    status: 'accepted',
+                    timestamp: new Date()
+                });
+                
+                await db.addFriend({
+                    userId: request.fromUserId,
+                    friendId: currentUser.id,
+                    status: 'accepted',
+                    timestamp: new Date()
+                });
+                
+                // Удаляем заявку
+                await db.db.friend_requests.delete(requestId);
+                
+                showNotification('Заявка в друзья принята!', 'success');
+                updateFriends();
+            } catch (error) {
+                showNotification('Ошибка принятия заявки: ' + error.message, 'error');
+            }
+        }
+
+        async function declineFriendRequest(requestId) {
+            try {
+                await db.db.friend_requests.delete(requestId);
+                showNotification('Заявка отклонена', 'success');
+                updateFriendRequests();
+            } catch (error) {
+                showNotification('Ошибка отклонения заявки: ' + error.message, 'error');
+            }
+        }
+
+        async function removeFriend(friendId) {
+            try {
+                // Удаляем дружбу в обе стороны
+                const friendships = await db.db.friends
+                    .where('userId').equals(currentUser.id)
+                    .and(f => f.friendId === friendId)
+                    .toArray();
+                
+                for (const friendship of friendships) {
+                    await db.db.friends.delete(friendship.id);
+                }
+                
+                const reverseFriendships = await db.db.friends
+                    .where('userId').equals(friendId)
+                    .and(f => f.friendId === currentUser.id)
+                    .toArray();
+                
+                for (const friendship of reverseFriendships) {
+                    await db.db.friends.delete(friendship.id);
+                }
+                
+                showNotification('Друг удален', 'success');
+                updateFriends();
+            } catch (error) {
+                showNotification('Ошибка удаления друга: ' + error.message, 'error');
+            }
+        }
+
+        function transferToFriend(cardNumber) {
+            document.getElementById('transferCard').value = cardNumber;
+            document.querySelector('.tab[data-tab="transfer"]').click();
+        }
+
+        // РЕФЕРАЛЬНАЯ СИСТЕМА - РАБОЧАЯ
+        function updateReferrals() {
+            document.getElementById('referralCountDisplay').textContent = currentUser.referralCount || 0;
+            document.getElementById('referralEarningsDisplay').textContent = (currentUser.referralEarnings || 0) + ' PC';
+            
+            // Обновляем список рефералов
+            updateReferralsList();
+        }
+
+        async function updateReferralsList() {
+            try {
+                const referrals = await db.getUserReferrals(currentUser.id);
+                const container = document.getElementById('referralsList');
+                
+                if (referrals.length === 0) {
+                    container.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--text-secondary);">У вас пока нет приглашенных друзей</div>';
+                    return;
+                }
+                
+                let html = '';
+                for (const ref of referrals) {
+                    const referredUser = await db.getUserById(ref.referredUserId);
+                    if (referredUser) {
+                        html += `
+                            <div class="referral-item">
+                                <div>
+                                    <strong>${referredUser.name}</strong>
+                                    <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                                        Зарегистрирован: ${new Date(ref.timestamp).toLocaleDateString()}
+                                    </div>
+                                </div>
+                                <div style="color: var(--secondary); font-weight: bold;">
+                                    +25 PC
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+                
+                container.innerHTML = html;
+            } catch (error) {
+                console.error('Ошибка загрузки рефералов:', error);
+            }
+        }
+
+        function copyPromoCode() {
+            const promoCodeInput = document.getElementById('userPromoCode');
+            promoCodeInput.select();
+            document.execCommand('copy');
+            showNotification('Промокод скопирован в буфер обмена!', 'success');
+        }
+
+        // ИСТОРИЯ ОПЕРАЦИЙ - РАБОЧАЯ
+        async function loadTransactionHistory() {
+            try {
+                const transactions = await db.getUserTransactions(currentUser.cardNumber);
+                const container = document.getElementById('transactionHistory');
+                
+                if (transactions.length === 0) {
+                    container.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--text-secondary);">История операций пуста</div>';
+                    return;
+                }
+                
+                let html = '';
+                transactions.forEach(transaction => {
+                    const isOutgoing = transaction.fromCard === currentUser.cardNumber;
+                    html += `
+                        <div class="history-item">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <strong>${isOutgoing ? 'Отправлено' : 'Получено'}</strong> 
+                                    ${isOutgoing ? 'на карту' : 'с карты'} ${isOutgoing ? transaction.toCard : transaction.fromCard}
+                                </div>
+                                <div style="color: ${isOutgoing ? 'var(--accent)' : 'var(--secondary)'}; font-weight: bold;">
+                                    ${isOutgoing ? '-' : '+'}${transaction.amount} PC
+                                </div>
+                            </div>
+                            <div style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 5px;">
+                                ${new Date(transaction.timestamp).toLocaleString()}
+                                ${transaction.message ? `• "${transaction.message}"` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                container.innerHTML = html;
+            } catch (error) {
+                console.error('Ошибка загрузки истории:', error);
+            }
+        }
+
+        // AFK ФАРМИНГ - РАБОЧИЙ
+        function startAfkFarming() {
+            if (afkInterval) clearInterval(afkInterval);
+            
+            afkInterval = setInterval(async () => {
+                if (!currentUser) return;
+                
+                const afkRate = getAfkRate();
+                if (afkRate > 0) {
+                    currentUser.balance += afkRate;
+                    currentUser.afkEarned = (currentUser.afkEarned || 0) + afkRate;
+                    currentUser.totalEarned = (currentUser.totalEarned || 0) + afkRate;
+                    
+                    await db.updateUser(currentUser.id, {
+                        balance: currentUser.balance,
+                        afkEarned: currentUser.afkEarned,
+                        totalEarned: currentUser.totalEarned
+                    });
+                    
+                    updateUI();
+                }
+            }, 1000);
+        }
+
+        function getAfkRate() {
+            const rates = {
+                'standard': 0,
+                'premium': 0.1,
+                'elite': 0.5,
+                'vip': 1.0,
+                'ultimate': 2.0
+            };
+            
+            const baseRate = rates[currentUser.subscription] || 0;
+            const afkLevel = currentUser.upgrades.afk || 0;
+            return baseRate * (1 + afkLevel * 0.2);
+        }
+
+        // АДМИН ПАНЕЛЬ - РАБОЧАЯ
+        async function adminAddCoins() {
+            if (!currentUser.isAdmin) {
+                showNotification('Недостаточно прав', 'error');
+                return;
+            }
+            
+            const userEmail = document.getElementById('adminUserEmail').value;
+            const amount = parseFloat(document.getElementById('adminCoinsAmount').value);
+            
+            if (!userEmail || !amount) {
+                showNotification('Заполните все поля', 'error');
+                return;
+            }
+            
+            try {
+                const user = await db.getUserByEmail(userEmail);
+                if (!user) {
+                    showNotification('Пользователь не найден', 'error');
+                    return;
+                }
+                
+                user.balance += amount;
+                await db.updateUser(user.id, { balance: user.balance });
+                
+                showNotification(`Выдано ${amount} PC пользователю ${userEmail}`, 'success');
+                
+                document.getElementById('adminUserEmail').value = '';
+                document.getElementById('adminCoinsAmount').value = '';
+                
+            } catch (error) {
+                showNotification('Ошибка выдачи монет: ' + error.message, 'error');
+            }
+        }
+
+        // ЧАТ - ЗАГЛУШКА
+        function startChatUpdates() {
+            // Заглушка для чата
+        }
+
+        function sendMessage() {
+            showNotification('Чат в разработке', 'success');
+        }
+
+        // ВЫХОД
+        function logout() {
+            currentUser = null;
+            if (afkInterval) clearInterval(afkInterval);
+            if (chatInterval) clearInterval(chatInterval);
+            localStorage.removeItem('pulsarScripts_user');
+            location.reload();
+        }
+
+        // ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ
+        window.addEventListener('load', async () => {
+            try {
+                db = new PulsarScriptsDB();
+                
+                // Настройка обработчиков событий
+                document.getElementById('loginForm').addEventListener('submit', login);
+                document.getElementById('registerForm').addEventListener('submit', register);
+                document.getElementById('showRegisterLink').addEventListener('click', showRegister);
+                document.getElementById('showLoginLink').addEventListener('click', showLogin);
+                document.getElementById('checkPromoBtn').addEventListener('click', checkPromoCode);
+                document.getElementById('sendCodeBtn').addEventListener('click', sendVerificationCode);
+                document.getElementById('logoutBtn').addEventListener('click', logout);
+                document.getElementById('clickerBtn').addEventListener('click', handleClick);
+                document.getElementById('transferBtn').addEventListener('click', makeTransfer);
+                document.getElementById('copyPromoBtn').addEventListener('click', copyPromoCode);
+                document.getElementById('searchUsersBtn').addEventListener('click', searchUsers);
+                document.getElementById('adminAddCoinsBtn').addEventListener('click', adminAddCoins);
+                document.getElementById('sendMessageBtn').addEventListener('click', sendMessage);
+                
+                // Настройка выбора аватара
+                setupAvatarSelection();
+                
+                // Настройка табов
+                document.querySelectorAll('.tab').forEach(tab => {
+                    tab.addEventListener('click', function() {
+                        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                        this.classList.add('active');
+                        document.getElementById(this.dataset.tab).classList.add('active');
+                        
+                        // При переключении на вкладку друзей обновляем список
+                        if (this.dataset.tab === 'friends') {
+                            updateFriends();
+                        }
+                    });
+                });
+                
+                // Настройка чата
+                document.getElementById('messageInput').addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') sendMessage();
+                });
+                
+                // Проверка автовхода
+                const savedUser = localStorage.getItem('pulsarScripts_user');
+                if (savedUser) {
+                    try {
+                        const userData = JSON.parse(savedUser);
+                        const user = await db.getUserByEmail(userData.email);
+                        if (user) {
+                            currentUser = user;
+                            showMainInterface();
+                        }
+                    } catch (error) {
+                        console.error('Ошибка автовхода:', error);
+                    }
+                }
+            } catch (error) {
+                console.error('Ошибка инициализации:', error);
+                showNotification('Ошибка загрузки приложения', 'error');
+            }
+        });
+    </script>
+</body>
+</html>
